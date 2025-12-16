@@ -1,9 +1,8 @@
 import javafx.scene.text.Text;
 import java.util.*;
 
-class DiffUtil {
+public class DiffUtil {
     public static List<Text> generateTextNodes(String a, String b) {
-        // split into tokens (words) — keep punctuation attached
         String[] A = a.split("\\s+");
         String[] B = b.split("\\s+");
 
@@ -20,24 +19,19 @@ class DiffUtil {
         int i=0, j=0;
         while (i<n || j<m) {
             if (i<n && j<m && A[i].equals(B[j])) {
-                Text t = new Text(A[i] + " ");
-                out.add(t);
+                out.add(new Text(A[i] + " "));
                 i++; j++;
             } else if (j<m && (i==n || dp[i][j+1] >= dp[i+1][j])) {
-                // addition in B
                 Text t = new Text(B[j] + " ");
                 t.setStyle("-fx-fill: green; -fx-font-weight: bold;");
                 out.add(t);
                 j++;
             } else if (i<n && (j==m || dp[i][j+1] < dp[i+1][j])) {
-                // deletion from A
                 Text t = new Text(A[i] + " ");
                 t.setStyle("-fx-fill: red; -fx-strikethrough: true;");
                 out.add(t);
                 i++;
-            } else {
-                break;
-            }
+            } else break;
         }
         return out;
     }
